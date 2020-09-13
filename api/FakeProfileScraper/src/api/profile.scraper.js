@@ -21,4 +21,35 @@ router.get('/:tag', async (req, res) => {
     }
 });
 
+router.get('/tweets/:tag', async (req, res) => {
+    try {
+        let tweets = await getUserTweets(req.params.tag);
+        res.json({
+            tweets
+        });
+    } catch (error) {
+        console.log(error);
+        res.json({
+            err: error
+        });
+    }
+});
+
+router.get('/all-data/:tag', async (req, res) => {
+    try {
+        let metadata = await getMetaData(req.params.tag);
+
+        //TODO: add other url!!
+
+        res.json({
+            metadata
+        });
+    } catch (error) {
+        console.log(error);
+        res.json({
+            err: error
+        });
+    }
+});
+
 module.exports = router;
