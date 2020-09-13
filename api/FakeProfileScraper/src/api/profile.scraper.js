@@ -1,4 +1,5 @@
 const express = require('express');
+const fetch = require('node-fetch');
 
 const getUserTweets = require("./helper/scrapper");
 const getMetaData = require("./helper/handle.metadata");
@@ -38,11 +39,11 @@ router.get('/tweets/:tag', async (req, res) => {
 router.get('/all-data/:tag', async (req, res) => {
     try {
         let metadata = await getMetaData(req.params.tag);
-
-        //TODO: add other url!!
+        let tweets = await (await fetch('http://ec2-18-225-6-124.us-east-2.compute.amazonaws.com:4000/api/v1/scrapper/tweets/' + req.params.tag)).json();
 
         res.json({
-            metadata
+            metadata,
+            tweets
         });
     } catch (error) {
         console.log(error);
