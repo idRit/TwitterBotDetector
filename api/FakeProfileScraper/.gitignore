@@ -71,3 +71,6 @@ typings/
 
 # Serverless directories
 .serverless
+
+textgenrnn_weights.hdf5
+s.txt
