@@ -81,6 +81,9 @@ router.get("/all-data/:tag", async (req, res) => {
 
 router.get('/analyse-handle/ec2/:tag', async (req, res) => {
   try {
+    let metadata = await getMetaData(req.params.tag);
+    if (metadata.errors) return res.json(metadata.errors[0]);
+
     let tweets = await getUserTweets(req.params.tag);
 
     let str = "";
@@ -92,8 +95,6 @@ router.get('/analyse-handle/ec2/:tag', async (req, res) => {
     // let path = __dirname + "/s.txt";
     fs.writeFileSync(path, str, { encoding: "ascii" });
     console.log("File written on path: \n" + path);
-
-    let metadata = await getMetaData(req.params.tag);
 
     let generated = await getGeneratedTweet(req.params.tag);
     console.log("Generated: " + generated);
