@@ -12,6 +12,6 @@ router.get('/', (req, res) => {
 });
 
 router.use('/emojis', emojis);
-router.use('/scrapper', scrapper);
+router.use('/analyse', scrapper);
 
 module.exports = router;
