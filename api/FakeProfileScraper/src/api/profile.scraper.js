@@ -61,7 +61,7 @@ router.get("/all-data/:tag", async (req, res) => {
     let metadata = await getMetaData(req.params.tag);
     let tweets = await (
       await fetch(
-        "http://ec2-18-225-6-124.us-east-2.compute.amazonaws.com:4000/api/v1/scrapper/tweets/" +
+        "http://ec2-18-225-6-124.us-east-2.compute.amazonaws.com:4040/api/v1/analyse/tweets/" +
         req.params.tag
       )
     ).json();
@@ -163,7 +163,7 @@ router.get('/analyse-handle/ec2/:tag', async (req, res) => {
 router.get('/analyse-handle/:handle', async (req, res) => {
   let tweets = await (
     await fetch(
-      "http://ec2-18-225-6-124.us-east-2.compute.amazonaws.com:4000/api/v1/scrapper/analyse-handle/ec2/" +
+      "http://ec2-18-225-6-124.us-east-2.compute.amazonaws.com:4040/api/v1/analyse/analyse-handle/ec2/" +
       req.params.tag
     )
   ).json();

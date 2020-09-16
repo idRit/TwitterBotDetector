@@ -1,5 +1,5 @@
 from textgenrnn import textgenrnn
-from bck import upload
+# from bck import upload
 
 import os
 
