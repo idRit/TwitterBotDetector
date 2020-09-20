@@ -168,8 +168,9 @@ router.get('/analyse-handle/ec2/:tag', async (req, res) => {
 router.get('/analyse-handle/:handle', async (req, res) => {
   let tweets = await (
     await fetch(
-      "http://ec2-18-225-6-124.us-east-2.compute.amazonaws.com:4040/api/v1/analyse/analyse-handle/ec2/" +
-      req.params.tag
+      // "http://ec2-18-225-6-124.us-east-2.compute.amazonaws.com:4040/api/v1/analyse/analyse-handle/ec2/" +
+      "http://ec2-3-137-179-205.us-east-2.compute.amazonaws.com:3000/api/v1/analyse/analyse-handle/ec2/" +
+      req.params.handle
     )
   ).json();
   return res.json(tweets);
