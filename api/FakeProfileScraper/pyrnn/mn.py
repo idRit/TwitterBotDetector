@@ -13,7 +13,7 @@ import os
 
 def getQuote (pref=""):
     textgen_2 = textgenrnn('textgenrnn_weights.hdf5')
-    generated_texts = textgen_2.generate(n=1, prefix=pref, return_as_list=True, temperature=0.2)
+    generated_texts = textgen_2.generate(n=1, prefix=pref, return_as_list=True, temperature=0.1)
     print(generated_texts)
     #tfjs.converters.save_keras_model('textgenrnn_weights.hdf5', '')
     return generated_texts
@@ -31,7 +31,7 @@ def train ():
     # textgen.train_from_file('./data/s2.txt', num_epochs=150)
     # textgen.train_from_file('./s.txt', num_epochs=1)
     path = os.getcwd()
-    textgen.train_from_file(path + '/s.txt', num_epochs=1)
+    textgen.train_from_file(path + '/s.txt', num_epochs=2)
     # textgen.generate()
 
 train()

@@ -7,6 +7,7 @@ const stringSimilarity = require('string-similarity');
 const getUserTweets = require("./helper/scrapper");
 const getMetaData = require("./helper/handle.metadata");
 const getGeneratedTweet = require("./helper/generate.tweet");
+const getUserTweets2 = require('./helper/scraper.v2');
 
 const {
   randomInt,
@@ -84,7 +85,8 @@ router.get('/analyse-handle/ec2/:tag', async (req, res) => {
     let metadata = await getMetaData(req.params.tag);
     if (metadata.errors) return res.json(metadata.errors[0]);
 
-    let tweets = await getUserTweets(req.params.tag);
+    // let tweets = await getUserTweets(req.params.tag);
+    let tweets = await getUserTweets2(req.params.tag);
 
     let str = "";
     tweets.forEach((el) => {
@@ -108,7 +110,8 @@ router.get('/analyse-handle/ec2/:tag', async (req, res) => {
         getBiggerStringLength(generated, randomSelection.text) - 0.5))
     ) / 0.66;
 
-    let DCsimMean = [], LVDsimMean = [], rtMean = [], fvMean = [];
+    let DCsimMean = [], LVDsimMean = [];
+    // , rtMean = [], fvMean = [];
 
     tweets.forEach(tweet => {
       LVDsimMean.push(
@@ -120,11 +123,12 @@ router.get('/analyse-handle/ec2/:tag', async (req, res) => {
       DCsimMean.push(
         stringSimilarity.compareTwoStrings(generated, tweet.text) / 0.8
       );
-      rtMean.push(parseInt(tweet.retweets));
-      fvMean.push(parseInt(tweet.favorites));
+      // rtMean.push(parseInt(tweet.retweets));
+      // fvMean.push(parseInt(tweet.favorites));
     });
 
     let responsePacket = {
+      metadata,
       dicesCoefficient: {
         dcRandomSelection: DCsimilarityRand,
         dcMean: calculateAverage(DCsimMean),
@@ -133,18 +137,18 @@ router.get('/analyse-handle/ec2/:tag', async (req, res) => {
         LDRatioRandomSelection: LVDsimilarityRand,
         LDRatioMean: calculateAverage(LVDsimMean),
       },
-      retweetStats: {
-        averageRetweets: Math.floor(calculateAverage(rtMean)),
-        lowestRetweet: calculateMin(rtMean),
-        highestRetweet: calculateMax(rtMean),
-      },
-      favStats: {
-        averageFavourites: Math.floor(calculateAverage(fvMean)),
-        lowestFavoutite: calculateMin(fvMean),
-        highestFavourite: calculateMax(fvMean),
-      },
-      generatedTweet: generated,
-      botScore: calculateAverage([
+      // retweetStats: {
+      //   averageRetweets: Math.floor(calculateAverage(rtMean)),
+      //   lowestRetweet: calculateMin(rtMean),
+      //   highestRetweet: calculateMax(rtMean),
+      // },
+      // favStats: {
+      //   averageFavourites: Math.floor(calculateAverage(fvMean)),
+      //   lowestFavoutite: calculateMin(fvMean),
+      //   highestFavourite: calculateMax(fvMean),
+      // },
+      // generatedTweet: generated,
+      fakeScore: calculateAverage([
         DCsimilarityRand,
         calculateAverage(DCsimMean),
         LVDsimilarityRand,
