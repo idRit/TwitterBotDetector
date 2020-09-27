@@ -1,2 +1,4 @@
 node_modules/
 env/
+s.txt
+textgenrnn_weights.hdf5
