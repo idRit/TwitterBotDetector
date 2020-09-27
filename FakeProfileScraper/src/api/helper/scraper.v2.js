@@ -38,10 +38,4 @@ async function formattedList(tweets) {
     return fList;
 }
 
-async function run() {
-    let tweets = await getData("kanyewest");
-}
-
 module.exports = getTweetsAxios;
-
-// run();

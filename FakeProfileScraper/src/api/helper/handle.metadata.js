@@ -1,9 +1,14 @@
 const fetch = require("node-fetch");
 
+const {
+    twitterAuth, 
+    twitterURL
+} = require('../../../config');
+
 module.exports = async (handle) => {
-    let res = await (await fetch("https://api.twitter.com/1.1/users/show.json?screen_name=" + handle, {
+    let res = await (await fetch(twitterURL + handle, {
         headers: {
-            "authorization": "Bearer AAAAAAAAAAAAAAAAAAAAAKOPHQEAAAAAsSGFMXgnwd7LFvbqeBhfWdc55gk%3DzEuis41JMCAMVG0sgd895Bt6cXxFfRRAUw0x4YjtiRQ4D6U8Ua"
+            "authorization": twitterAuth
         }
     })).json();
     return res;

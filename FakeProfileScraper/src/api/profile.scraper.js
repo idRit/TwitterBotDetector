@@ -16,6 +16,10 @@ const {
   calculateMin
 } = require('./helper/util');
 
+const {
+  ec2URL
+} = require('../../config');
+
 const router = express.Router();
 
 router.get('/analyse-handle/ec2/:tag', async (req, res) => {
@@ -29,15 +33,15 @@ router.get('/analyse-handle/ec2/:tag', async (req, res) => {
     tweets.forEach((el) => {
       str += el.text + "\n";
     });
-    // let path = __dirname + "/../../pyrnn/s.txt";
+
     let path = __dirname + "/../../s.txt";
-    // let path = __dirname + "/s.txt";
+
     fs.writeFileSync(path, str, { encoding: "ascii" });
     console.log("File written on path: \n" + path);
 
     let generated = await getGeneratedTweet(req.params.tag);
-    console.log("Generated: " + generated);
     while (generated == null) generated = await getGeneratedTweet(req.params.tag);
+    console.log("Generated: " + generated);
 
     let randomSelection = tweets[randomInt(tweets.length - 1)];
 
@@ -48,7 +52,6 @@ router.get('/analyse-handle/ec2/:tag', async (req, res) => {
     ) / 0.66;
 
     let DCsimMean = [], LVDsimMean = [];
-    // , rtMean = [], fvMean = [];
 
     tweets.forEach(tweet => {
       LVDsimMean.push(
@@ -60,12 +63,11 @@ router.get('/analyse-handle/ec2/:tag', async (req, res) => {
       DCsimMean.push(
         stringSimilarity.compareTwoStrings(generated, tweet.text) / 0.8
       );
-      // rtMean.push(parseInt(tweet.retweets));
-      // fvMean.push(parseInt(tweet.favorites));
     });
 
     let responsePacket = {
-      metadata,
+      name: metadata.name,
+      desc: metadata.description,
       dicesCoefficient: {
         dcRandomSelection: DCsimilarityRand,
         dcMean: calculateAverage(DCsimMean),
@@ -74,17 +76,6 @@ router.get('/analyse-handle/ec2/:tag', async (req, res) => {
         LDRatioRandomSelection: LVDsimilarityRand,
         LDRatioMean: calculateAverage(LVDsimMean),
       },
-      // retweetStats: {
-      //   averageRetweets: Math.floor(calculateAverage(rtMean)),
-      //   lowestRetweet: calculateMin(rtMean),
-      //   highestRetweet: calculateMax(rtMean),
-      // },
-      // favStats: {
-      //   averageFavourites: Math.floor(calculateAverage(fvMean)),
-      //   lowestFavoutite: calculateMin(fvMean),
-      //   highestFavourite: calculateMax(fvMean),
-      // },
-      // generatedTweet: generated,
       fakeScore: calculateAverage([
         DCsimilarityRand,
         calculateAverage(DCsimMean),
@@ -103,14 +94,7 @@ router.get('/analyse-handle/ec2/:tag', async (req, res) => {
 });
 
 router.get('/analyse-handle/:handle', async (req, res) => {
-  let tweets = await (
-    await fetch(
-      // "http://ec2-18-225-6-124.us-east-2.compute.amazonaws.com:4040/api/v1/analyse/analyse-handle/ec2/" +
-      // "http://ec2-3-137-179-205.us-east-2.compute.amazonaws.com:3000/api/v1/analyse/analyse-handle/ec2/" +
-      "http://ec2-3-137-168-72.us-east-2.compute.amazonaws.com:3000/api/v1/analyse/analyse-handle/ec2/" +
-      req.params.handle
-    )
-  ).json();
+  let tweets = await ( await fetch(ec2URL + req.params.handle)).json();
   return res.json(tweets);
 });
 
