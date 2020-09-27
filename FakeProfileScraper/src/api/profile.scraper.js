@@ -4,7 +4,6 @@ const fs = require("fs");
 const levenshtein = require('js-levenshtein');
 const stringSimilarity = require('string-similarity');
 
-const getUserTweets = require("./helper/scrapper");
 const getMetaData = require("./helper/handle.metadata");
 const getGeneratedTweet = require("./helper/generate.tweet");
 const getUserTweets2 = require('./helper/scraper.v2');
@@ -19,73 +18,11 @@ const {
 
 const router = express.Router();
 
-router.get("/:tag", async (req, res) => {
-  try {
-    let tweets = await getUserTweets(req.params.tag);
-    let metadata = await getMetaData(req.params.tag);
-    res.json({
-      metadata,
-      tweets,
-    });
-  } catch (error) {
-    console.log(error);
-    res.json({
-      err: error,
-    });
-  }
-});
-
-router.get("/tweets/:tag", async (req, res) => {
-  try {
-    let tweets = await getUserTweets(req.params.tag);
-    let str = "";
-    tweets.forEach((el) => {
-      str += el.text + "\n";
-    });
-    // let path = __dirname + "/../../pyrnn/s.txt";
-    // let path = __dirname + "./helper/s.txt";
-    let path = __dirname + "/../../s.txt";
-    fs.writeFileSync(path, str, { encoding: "ascii" });
-    res.json({
-      tweets,
-    });
-  } catch (error) {
-    console.log(error);
-    res.json({
-      err: error,
-    });
-  }
-});
-
-router.get("/all-data/:tag", async (req, res) => {
-  try {
-    let metadata = await getMetaData(req.params.tag);
-    let tweets = await (
-      await fetch(
-        "http://ec2-18-225-6-124.us-east-2.compute.amazonaws.com:4040/api/v1/analyse/tweets/" +
-        req.params.tag
-      )
-    ).json();
-    tweets = tweets.tweets;
-
-    res.json({
-      metadata,
-      tweets,
-    });
-  } catch (error) {
-    console.log(error);
-    res.json({
-      err: error,
-    });
-  }
-});
-
 router.get('/analyse-handle/ec2/:tag', async (req, res) => {
   try {
     let metadata = await getMetaData(req.params.tag);
     if (metadata.errors) return res.json(metadata.errors[0]);
 
-    // let tweets = await getUserTweets(req.params.tag);
     let tweets = await getUserTweets2(req.params.tag);
 
     let str = "";
