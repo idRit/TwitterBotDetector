@@ -1,8 +1,9 @@
 <script>
     import { Textfield, Button } from "svelte-mui";
-    import { tag } from "../stores";
+    import { tag, btnDisable } from "../stores";
 
     let handle = "";
+    let disabled = false;
 
     async function handleBtnClick() {
         if (handle) {
@@ -11,6 +12,10 @@
         }
         return;
     }
+
+    const unsubscribe = btnDisable.subscribe(async (value) => {
+        disabled = value;
+    });
 
     async function publishHandle(handle) {
         tag.set(handle);
@@ -21,6 +26,7 @@
             case 13:
                 event.preventDefault();
                 handleBtnClick();
+                handleOnFocusOut();
                 break;
 
             case 8:
@@ -50,12 +56,14 @@
     }
 
     .tfContainer {
-        padding-right: 10px;
+        padding-right: 15px;
+        margin-right: auto;
     }
 
     .btnContainer {
         padding-top: 15px;
-        padding-left: 10px;
+        padding-left: 5px;
+        margin-left: auto;
     }
 </style>
 
@@ -69,6 +77,6 @@
         on:focusout={handleOnFocusOut} />
     </div>
     <div class="btnContainer">
-        <Button raised on:click={handleBtnClick}>Detect</Button>
+        <Button raised on:click={handleBtnClick} disabled={disabled}>Detect</Button>
     </div>
 </div>

@@ -4,7 +4,7 @@
     import Loading from "./Loading.svelte";
     import Guage from "./Guage.svelte";
 
-    import { tag } from "../stores.js";
+    import { tag, btnDisable } from "../stores.js";
 
     let handle;
     let promise;
@@ -16,7 +16,9 @@
     });
 
     async function getUserDetails() {
+        btnDisable.set(true);
         const packet = await (await fetch(`${uri}${handle}`)).json();
+        btnDisable.set(false);
         if (packet.code) {
             throw new Error(packet.message);
         } else {
@@ -93,6 +95,13 @@
 
     #disk_d {
         margin: 10px;
+    }
+
+    @media (min-width: 979px) {
+        /* Selectors and styles affecting screens WIDER THAN 979px (Desktop) */
+        .row {
+            height: 27vh;
+        }
     }
 </style>
 
