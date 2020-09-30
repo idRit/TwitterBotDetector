@@ -29,6 +29,10 @@ router.get('/analyse-handle/ec2/:tag', async(req, res) => {
         if (metadata.errors) return res.json(metadata.errors[0]);
 
         let tweets = await getUserTweets2(req.params.tag);
+        if (tweets.length === 0) return res.json({
+            code: 90,
+            message: "User has no tweets!!"
+        });
 
         let str = "";
         tweets.forEach((el) => {

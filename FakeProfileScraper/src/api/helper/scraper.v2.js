@@ -38,4 +38,11 @@ async function formattedList(tweets) {
     return fList;
 }
 
+// async function test() {
+//     let res = await getTweetsAxios("lalalal");
+//     console.log(res);
+// }
+
+// test();
+
 module.exports = getTweetsAxios;
