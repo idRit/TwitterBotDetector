@@ -12,3 +12,8 @@ exports.calculateAverage = arr => {
 exports.calculateMax = arr => Math.max(...arr);
 
 exports.calculateMin = arr => Math.min(...arr);
+
+exports.capCheck = val => {
+    if (val >= 1) return 1;
+    return val;
+}
