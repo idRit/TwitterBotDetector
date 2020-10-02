@@ -51,7 +51,7 @@
     }
 
     .row {
-        height: 21vh;
+        height: 14vh;
         display: flex;
         align-items: center;
         justify-content: center;
