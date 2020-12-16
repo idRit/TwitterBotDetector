@@ -3,6 +3,7 @@
 
     import Loading from "./Loading.svelte";
     import Guage from "./Guage.svelte";
+    import BodyCard from "./BodyCard.svelte";
 
     import { tag, btnDisable } from "../stores.js";
 
@@ -18,6 +19,21 @@
     async function getUserDetails() {
         btnDisable.set(true);
         const packet = await (await fetch(`${uri}${handle}`)).json();
+        // const packet = {
+        //     name: "here's your reminder",
+        //     desc:
+        //         "please take a break! for a personal reminder, please tweet me! (bot-in-progress by @jonnysun) (current av: apples, james marion shull, 1912, c/o @pomological)",
+        //     dicesCoefficient: {
+        //         dcRandomSelection: 0.16666666666666666,
+        //         dcMean: 0.21082017915523107,
+        //     },
+        //     levenshteinDistance: {
+        //         LDRatioRandomSelection: 0.3280224929709466,
+        //         LDRatioMean: 0.3420057354434891,
+        //     },
+        //     fakeScore: 0.30019434669221845,
+        // };
+        console.log(packet);
         btnDisable.set(false);
         if (packet.code) {
             throw new Error(packet.message);
@@ -110,10 +126,12 @@
 {:then packet}
     <!-- <p>name: {packet.name}</p> -->
     <div class="container">
-    <div class="nameDisplay rowStyle">
-        <p>Account Name: {packet.name}</p>
-    </div>
-    <div class="row rowStyle">
+        <div class="nameDisplay rowStyle">
+            <p>Account Name: {packet.name}</p>
+        </div>
+        <BodyCard 
+            str={JSON.stringify(packet)}/>
+        <!-- <div class="row rowStyle">
         <div class="score rowStyle">
             <Guage 
                 val={packet.dicesCoefficient.dcRandomSelection}
@@ -136,13 +154,15 @@
                 val={packet.levenshteinDistance.LDRatioMean}
                 attr="Levenshtein Distance Average"/>
         </div>
+    </div> -->
+        <div class="final rowStyle">
+            <p>(Higher is Faker)</p>
+            <meter
+                id="disk_d"
+                value={packet.fakeScore}>{Math.floor(packet.fakeScore * 100)}%</meter>
+            <p>{Math.floor(packet.fakeScore * 100)}%</p>
+        </div>
     </div>
-    <div class="final rowStyle">
-        <p>(Higher is Faker)</p>
-        <meter id="disk_d" value="{packet.fakeScore}">{Math.floor(packet.fakeScore * 100)}%</meter>
-        <p>{Math.floor(packet.fakeScore * 100)}%</p>
-    </div>
-</div>
 {:catch error}
     <p style="color: red">{error.message}</p>
 {/await}
