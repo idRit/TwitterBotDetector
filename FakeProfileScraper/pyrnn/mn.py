@@ -29,11 +29,11 @@ def train ():
     textgen = textgenrnn()
     textgen.reset()
     # textgen.train_from_file('./data/s2.txt', num_epochs=150)
-    # textgen.train_from_file('./s.txt', num_epochs=1)
+    # textgen.train_from_file('./s.txt', num_epochs=3)
     path = os.getcwd()
+    #print(path)
     textgen.train_from_file(path + '/s.txt', num_epochs=2)
     # textgen.generate()
 
 train()
-
 getQuote()

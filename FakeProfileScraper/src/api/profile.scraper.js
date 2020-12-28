@@ -7,6 +7,7 @@ const stringSimilarity = require('string-similarity');
 const getMetaData = require("./helper/handle.metadata");
 const getGeneratedTweet = require("./helper/generate.tweet");
 const getUserTweets2 = require('./helper/scraper.v2');
+const getUserTweets3 = require('./helper/scraper.v3');
 
 const {
     randomInt,
@@ -28,7 +29,7 @@ router.get('/analyse-handle/ec2/:tag', async(req, res) => {
         let metadata = await getMetaData(req.params.tag);
         if (metadata.errors) return res.json(metadata.errors[0]);
 
-        let tweets = await getUserTweets2(req.params.tag);
+        let tweets = await getUserTweets3(req.params.tag);
         if (tweets.length === 0) return res.json({
             code: 90,
             message: "User has no tweets!!"
@@ -39,7 +40,8 @@ router.get('/analyse-handle/ec2/:tag', async(req, res) => {
             str += el.text + "\n";
         });
 
-        let path = __dirname + "/../../s.txt";
+        //let path = __dirname + "/../../pyrnn/s.txt";
+	let path = __dirname + "/../../s.txt";
 
         fs.writeFileSync(path, str, { encoding: "ascii" });
         console.log("File written on path: \n" + path);
