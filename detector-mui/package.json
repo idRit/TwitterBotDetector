@@ -18,6 +18,8 @@
     "svelte-mui": "^0.3.3-4"
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
     "sirv-cli": "^1.0.0",
     "svelte-chartjs": "^1.0.1",
     "svelte-speedometer": "^1.0.2"
