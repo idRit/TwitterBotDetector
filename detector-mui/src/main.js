@@ -5,7 +5,9 @@ const app = new App({
     props: {
         // name: 'world'
         // uri: "http://3.137.168.72:3000/api/v1/analyse/analyse-handle/ec2/"
-        uri: "http://3.22.130.81:3000/api/v1/analyse/analyse-handle/ec2/"
+        // uri: "http://3.22.130.81:3000/api/v1/analyse/analyse-handle/ec2/"
+        uri: "http://localhost:3000/api/v1/analyse/analyse-handle/ec2/"
+    // }
     }
 });
 
