@@ -47,7 +47,10 @@ router.get('/analyse-handle/ec2/:tag', async(req, res) => {
         console.log("File written on path: \n" + path);
 
         let generated = await getGeneratedTweet(req.params.tag);
-        while (generated == null) generated = await getGeneratedTweet(req.params.tag);
+        if (generated == null) return res.json({
+            code: 88,
+            message: "Language Error!"
+        });
         console.log("Generated: " + generated);
 
         let randomSelection = tweets[randomInt(tweets.length - 1)];
