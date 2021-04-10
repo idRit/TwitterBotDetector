@@ -26,6 +26,7 @@
     "js-levenshtein": "^1.1.6",
     "morgan": "^1.10.0",
     "node-fetch": "^2.6.1",
+    "puppeteer": "^8.0.0",
     "string-similarity": "^4.0.2"
   },
   "devDependencies": {

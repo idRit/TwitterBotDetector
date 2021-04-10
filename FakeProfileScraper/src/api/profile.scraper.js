@@ -7,6 +7,7 @@ const stringSimilarity = require('string-similarity');
 const getMetaData = require("./helper/handle.metadata");
 const getGeneratedTweet = require("./helper/generate.tweet");
 const getUserTweets2 = require('./helper/scraper.v2');
+const getUserTweets3 = require('./helper/scraper.v3');
 
 const {
     randomInt,
@@ -28,7 +29,8 @@ router.get('/analyse-handle/ec2/:tag', async(req, res) => {
         let metadata = await getMetaData(req.params.tag);
         if (metadata.errors) return res.json(metadata.errors[0]);
 
-        let tweets = await getUserTweets2(req.params.tag);
+        let tweets = await getUserTweets3(req.params.tag);
+
         if (tweets.length === 0) return res.json({
             code: 90,
             message: "User has no tweets!!"
@@ -50,11 +52,11 @@ router.get('/analyse-handle/ec2/:tag', async(req, res) => {
 
         let randomSelection = tweets[randomInt(tweets.length - 1)];
 
-        let DCsimilarityRand = stringSimilarity.compareTwoStrings(generated, randomSelection.text) / 0.8;
+        let DCsimilarityRand = stringSimilarity.compareTwoStrings(generated, randomSelection.text) / 0.3;
         let LVDsimilarityRand = (0.5 -
             ((levenshtein(generated, randomSelection.text) /
                 getBiggerStringLength(generated, randomSelection.text) - 0.5))
-        ) / 0.66;
+        ) / 0.33;
 
         let DCsimMean = [],
             LVDsimMean = [];
@@ -64,10 +66,10 @@ router.get('/analyse-handle/ec2/:tag', async(req, res) => {
                 (0.5 -
                     ((levenshtein(generated, tweet.text) /
                         getBiggerStringLength(generated, tweet.text) - 0.5))
-                ) / 0.66
+                ) / 0.33
             );
             DCsimMean.push(
-                stringSimilarity.compareTwoStrings(generated, tweet.text) / 0.8
+                stringSimilarity.compareTwoStrings(generated, tweet.text) / 0.3
             );
         });
 
@@ -83,9 +85,7 @@ router.get('/analyse-handle/ec2/:tag', async(req, res) => {
                 LDRatioMean: capCheck(calculateAverage(LVDsimMean)),
             },
             fakeScore: capCheck(calculateAverage([
-                DCsimilarityRand,
                 calculateAverage(DCsimMean),
-                LVDsimilarityRand,
                 calculateAverage(LVDsimMean)
             ])),
         };
